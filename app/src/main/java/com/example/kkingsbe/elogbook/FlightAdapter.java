@@ -33,7 +33,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ExampleVie
         public TextView mAirFrame;
         public TextView mTailNumber;
         public ImageView mEditButton;
-        public FloatingActionButton mDeleteButton;
+        public ImageView mDeleteButton;
 
         public ExampleViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
