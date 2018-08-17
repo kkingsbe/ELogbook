@@ -91,4 +91,9 @@ public class EditFlightActivity extends Activity {
         setResult(Activity.RESULT_OK);
         finish();
     }
+
+    public void back(View v){
+        setResult(Activity.RESULT_CANCELED);
+        finish();
+    }
 }
