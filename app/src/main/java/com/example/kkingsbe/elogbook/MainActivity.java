@@ -1,16 +1,20 @@
 package com.example.kkingsbe.elogbook;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.os.Looper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -239,7 +243,7 @@ public class MainActivity extends Activity {
     }
 
     public void removeItem(final int position) {
-        new Thread(new Runnable() {
+        final Thread removeFlight = new Thread(new Runnable() {
             @Override
             public void run() {
                 List<FlightsDO> Flights = getFlights(AccessCode);
@@ -254,12 +258,36 @@ public class MainActivity extends Activity {
                 flightItem.setAccesscode(Flights.get(position).getAccesscode());
 
                 dynamoDBMapper.delete(flightItem);
-
                 // Item deleted
+                Looper.prepare();
+                Toast.makeText(MainActivity.this,
+                        "Flight Deleted", Toast.LENGTH_LONG).show();
             }
-        }).start();
+        });
 
-        refreshFlights();
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setCancelable(true);
+        builder.setTitle("Delete Flight");
+        builder.setMessage("Are you sure that you want to delete this flight?");
+        builder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeFlight.start();
+                        refreshFlights();
+                    }
+                });
+
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
     }
 
     private void refreshFlights(){
@@ -271,7 +299,7 @@ public class MainActivity extends Activity {
         search.setAccesscode(accessCode);
 
         DynamoDBQueryExpression<FlightsDO> queryExpression = new DynamoDBQueryExpression<FlightsDO>()
-                .withHashKeyValues(search);
+                .withHashKeyValues(search).withScanIndexForward(true);
 
         List<FlightsDO> flightsList = dynamoDBMapper.query(FlightsDO.class, queryExpression);
         return flightsList;
