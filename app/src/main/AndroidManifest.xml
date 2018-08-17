@@ -28,7 +28,10 @@
         <activity android:name=".RefreshActivity" />
         <activity
             android:name=".EditFlightActivity"
-            android:label="@string/title_activity_edit_flight"></activity>
+            android:label="@string/title_activity_edit_flight" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile"></activity>
     </application>
 
 </manifest>
