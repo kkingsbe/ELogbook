@@ -346,7 +346,7 @@ public class MainActivity extends Activity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode == 1){
+        if (requestCode == 0 || requestCode == 1){
             refreshFlights();
         }
     }
