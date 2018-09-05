@@ -180,7 +180,7 @@ public class MainActivity extends Activity {
                 List<FlightsDO> flightsList = getFlights(accessCode); //Gets all flights with a specific accessCode
 
                 if(flightsList.size() > 0){
-                    NoFlights.setVisibility(View.INVISIBLE);
+                    NoFlights.setVisibility(View.INVISIBLE); //Sets visibility of NoFlights to be invisible
                     for(int x = 0; x < flightsList.size(); x++){
                         flightList.add(new ExampleFlight(
                                 flightsList.get(x).getFlighttime(),
@@ -191,7 +191,7 @@ public class MainActivity extends Activity {
                     }
                     anyFlights[0] = true;
                 } else {
-                    NoFlights.setVisibility(View.VISIBLE);
+                    NoFlights.setVisibility(View.VISIBLE); //Sets visibility of NoFlights to be visible
                 }
 
             }
@@ -204,7 +204,7 @@ public class MainActivity extends Activity {
         //flightList.add(new ExampleFlight("1.5 Hours", "PA-28", "N80FT", "8/9/2018", "KGAI => KGAI"));
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(500); //Make sure that the previous thread finished before moving on
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
