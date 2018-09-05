@@ -6,6 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class NewFlightActivity extends AppCompatActivity {
     public String AccessCode;
@@ -29,17 +34,48 @@ public class NewFlightActivity extends AppCompatActivity {
         EditText departureText = findViewById(R.id.departureText);
         EditText arrivalText = findViewById(R.id.arrivalText);
 
-        Intent intent = new Intent(NewFlightActivity.this, NewFlightSave.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("Access Code", AccessCode);
-        bundle.putString("Date", dateText.getText().toString());
-        bundle.putString("Airframe", airframeText.getText().toString());
-        bundle.putString("Departing Airport", departureText.getText().toString());
-        bundle.putString("Arriving Airport", arrivalText.getText().toString());
-        bundle.putString("Flight Time", flighttimeText.getText().toString());
-        bundle.putString("Tail Number", tailnumberText.getText().toString());
-        intent.putExtras(bundle);
-        startActivityForResult(intent, 0, bundle);
+        String date = dateText.getText().toString();
+        String airframe = airframeText.getText().toString();
+        String departure = departureText.getText().toString();
+        String arrival = arrivalText.getText().toString();
+        String flighttime = flighttimeText.getText().toString();
+        String tailnumber = tailnumberText.getText().toString();
+
+        if(validate(date, airframe, departure, arrival, flighttime, tailnumber).equals("")){
+            Intent intent = new Intent(NewFlightActivity.this, NewFlightSave.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("Access Code", AccessCode);
+            bundle.putString("Date", date);
+            bundle.putString("Airframe", airframe);
+            bundle.putString("Departing Airport", departure);
+            bundle.putString("Arriving Airport", arrival);
+            bundle.putString("Flight Time", flighttime);
+            bundle.putString("Tail Number", tailnumber);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 0, bundle);
+        } else if(validate(date, airframe, departure, arrival, flighttime, tailnumber).equals("invalidDate")){
+            Toast.makeText(NewFlightActivity.this, "Profile", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private String validate(String date, String airframe, String departure, String arrival, String flighttime, String tailnumber) {
+        String result = "";
+        SimpleDateFormat formatter1=new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter2=new SimpleDateFormat("dd-MMM-yyyy");
+        Date parsedDate;
+
+        try {
+            parsedDate = formatter1.parse(date);
+        } catch (ParseException e) {
+            try {
+                parsedDate = formatter2.parse(date);
+            } catch (ParseException e1) {
+                result =  "invalidDate";
+            }
+        }
+        return result;
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
