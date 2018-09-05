@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -133,6 +134,8 @@ public class MainActivity extends Activity {
                 switch (menuItem.getItemId()){
                     case R.id.action_profile:
                         Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                        startActivityForResult(intent,2);
                         break;
                     case R.id.action_flights:
                         Toast.makeText(MainActivity.this, "Flights", Toast.LENGTH_SHORT).show();
@@ -153,6 +156,7 @@ public class MainActivity extends Activity {
     private void populateCards(final String accessCode) {
         final boolean[] anyFlights = {false};
         final ArrayList<ExampleFlight> flightList = new ArrayList<>();
+        final TextView NoFlights = findViewById(R.id.NoFlights);
 
         // AWSMobileClient enables AWS user credentials to access your table
         AWSMobileClient.getInstance().initialize(this).execute();
@@ -176,6 +180,7 @@ public class MainActivity extends Activity {
                 List<FlightsDO> flightsList = getFlights(accessCode); //Gets all flights with a specific accessCode
 
                 if(flightsList.size() > 0){
+                    NoFlights.setVisibility(View.INVISIBLE);
                     for(int x = 0; x < flightsList.size(); x++){
                         flightList.add(new ExampleFlight(
                                 flightsList.get(x).getFlighttime(),
@@ -185,6 +190,8 @@ public class MainActivity extends Activity {
                                 flightsList.get(x).getDepartureairport() + " => " + flightsList.get(x).getArrivalairport()));
                     }
                     anyFlights[0] = true;
+                } else {
+                    NoFlights.setVisibility(View.VISIBLE);
                 }
 
             }

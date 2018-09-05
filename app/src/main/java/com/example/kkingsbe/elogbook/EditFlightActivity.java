@@ -96,4 +96,9 @@ public class EditFlightActivity extends Activity {
         setResult(Activity.RESULT_CANCELED);
         finish();
     }
+
+    public void selectDate(View v){
+        Intent intent = new Intent(EditFlightActivity.this, DateActivity.class);
+        startActivityForResult(intent,0);
+    }
 }

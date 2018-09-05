@@ -31,7 +31,10 @@
             android:label="@string/title_activity_edit_flight" />
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile"></activity>
+            android:label="@string/title_activity_profile" />
+        <activity
+            android:name=".DateActivity"
+            android:label="@string/title_activity_date"></activity>
     </application>
 
 </manifest>
