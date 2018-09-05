@@ -133,6 +133,8 @@ public class MainActivity extends Activity {
                 switch (menuItem.getItemId()){
                     case R.id.action_profile:
                         Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                        startActivityForResult(intent, 2);
                         break;
                     case R.id.action_flights:
                         Toast.makeText(MainActivity.this, "Flights", Toast.LENGTH_SHORT).show();
