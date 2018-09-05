@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class NewFlightActivity extends AppCompatActivity {
     public String AccessCode;
@@ -29,17 +30,35 @@ public class NewFlightActivity extends AppCompatActivity {
         EditText departureText = findViewById(R.id.departureText);
         EditText arrivalText = findViewById(R.id.arrivalText);
 
-        Intent intent = new Intent(NewFlightActivity.this, NewFlightSave.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("Access Code", AccessCode);
-        bundle.putString("Date", dateText.getText().toString());
-        bundle.putString("Airframe", airframeText.getText().toString());
-        bundle.putString("Departing Airport", departureText.getText().toString());
-        bundle.putString("Arriving Airport", arrivalText.getText().toString());
-        bundle.putString("Flight Time", flighttimeText.getText().toString());
-        bundle.putString("Tail Number", tailnumberText.getText().toString());
-        intent.putExtras(bundle);
-        startActivityForResult(intent, 0, bundle);
+        String date = dateText.getText().toString();
+        String airframe = airframeText.getText().toString();
+        String departure = departureText.getText().toString();
+        String arrival = arrivalText.getText().toString();
+        String flighttime = flighttimeText.getText().toString();
+        String tailnumber = tailnumberText.getText().toString();
+
+        if (
+                date.length() < 1 ||
+                airframe.length() < 1 ||
+                departure.length() < 1 ||
+                arrival.length() < 1 ||
+                flighttime.length() < 1 ||
+                tailnumber.length() < 1
+            ){
+            Toast.makeText(NewFlightActivity.this, "Make sure all fields are filled out", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(NewFlightActivity.this, NewFlightSave.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("Access Code", AccessCode);
+            bundle.putString("Date", date);
+            bundle.putString("Airframe", airframe);
+            bundle.putString("Departing Airport", departure);
+            bundle.putString("Arriving Airport", arrival);
+            bundle.putString("Flight Time", flighttime);
+            bundle.putString("Tail Number", tailnumber);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 0, bundle);
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
