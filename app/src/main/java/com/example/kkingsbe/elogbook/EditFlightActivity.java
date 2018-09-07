@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
@@ -53,43 +54,62 @@ public class EditFlightActivity extends Activity {
     }
 
     public void updateFlight(View v) {
-        // AWSMobileClient enables AWS user credentials to access your table
-        AWSMobileClient.getInstance().initialize(this).execute();
+        String Date = DateEditText.getText().toString();
+        String AirFrame = AirframeEditText.getText().toString();
+        String departure = DepartingAirportEditText.getText().toString();
+        String arrival = ArrivingAirportEditText.getText().toString();
+        String flighttime = FlightTimeEditText.getText().toString();
+        String tailnumber = TailNumberEditText.getText().toString();
 
-        AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
-        AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
+        // Check to see if any of the fields are blank
+        if (
+                        Date.length() < 1 ||
+                        AirFrame.length() < 1 ||
+                        departure.length() < 1 ||
+                        arrival.length() < 1 ||
+                        flighttime.length() < 1 ||
+                        tailnumber.length() < 1
+                ) {
+            Toast.makeText(EditFlightActivity.this, "Make sure all fields are filled out", Toast.LENGTH_LONG).show();
+        } else {
+            // AWSMobileClient enables AWS user credentials to access your table
+            AWSMobileClient.getInstance().initialize(this).execute();
+
+            AWSCredentialsProvider credentialsProvider = AWSMobileClient.getInstance().getCredentialsProvider();
+            AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
 
 
-        // Add code to instantiate a AmazonDynamoDBClient
-        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
+            // Add code to instantiate a AmazonDynamoDBClient
+            AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(credentialsProvider);
 
-        this.dynamoDBMapper = DynamoDBMapper.builder()
-                .dynamoDBClient(dynamoDBClient)
-                .awsConfiguration(configuration)
-                .build();
+            this.dynamoDBMapper = DynamoDBMapper.builder()
+                    .dynamoDBClient(dynamoDBClient)
+                    .awsConfiguration(configuration)
+                    .build();
 
-        final FlightsDO flight = new FlightsDO();
+            final FlightsDO flight = new FlightsDO();
 
-        flight.setAccesscode(AccessCode);
-        flight.setAirframe(AirframeEditText.getText().toString());
-        flight.setArrivalairport(ArrivingAirportEditText.getText().toString());
-        flight.setDate(DateEditText.getText().toString());
-        flight.setDepartureairport(DepartingAirportEditText.getText().toString());
-        flight.setFlighttime(FlightTimeEditText.getText().toString());
-        flight.setTailnumber(TailNumberEditText.getText().toString());
+            flight.setAccesscode(AccessCode);
+            flight.setAirframe(AirframeEditText.getText().toString());
+            flight.setArrivalairport(ArrivingAirportEditText.getText().toString());
+            flight.setDate(DateEditText.getText().toString());
+            flight.setDepartureairport(DepartingAirportEditText.getText().toString());
+            flight.setFlighttime(FlightTimeEditText.getText().toString());
+            flight.setTailnumber(TailNumberEditText.getText().toString());
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
-                dynamoDBMapper.save(flight);
+                    dynamoDBMapper.save(flight);
 
-                // Item updated
-            }
-        }).start();
+                    // Item updated
+                }
+            }).start();
 
-        setResult(Activity.RESULT_OK);
-        finish();
+            setResult(Activity.RESULT_OK);
+            finish();
+        }
     }
 
     public void back(View v){
