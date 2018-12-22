@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Date;
+
 public class NewFlightActivity extends AppCompatActivity {
     public String AccessCode;
 
